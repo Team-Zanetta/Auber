@@ -10,7 +10,5 @@ public class DesktopLauncher {
     config.title = "Auber";
 
     new LwjglApplication(new AuberGame(), config);
-
-    System.out.println("AHHHHHHH");
   }
 }
