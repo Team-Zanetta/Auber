@@ -29,7 +29,6 @@ public class GameScreen extends ScreenAdapter {
   Sprite stars;
 
   SpriteBatch screenBatch = new SpriteBatch();
-  GameUi ui;
 
   int workingSystems = 0;
 
@@ -39,29 +38,31 @@ public class GameScreen extends ScreenAdapter {
    * @param game The game object
    * @param demoMode Whether the game should run in demo mode
    * */
-  public GameScreen(AuberGame game, boolean demoMode, boolean load) {
-    this.game = game;
-    ui = new GameUi(game);
-    ui.queueMessage(MenuScreen.difficulty.toString());
-    world = new World(game, demoMode, load);
-    world.ui = ui;
 
+  public GameScreen(AuberGame game, boolean demoMode, boolean load, World.Difficulty difficulty) {
     if(!load){
-      for (int i = 0; i < World.MAX_INFILTRATORS_IN_GAME; i++) {
+      this.game = game;
+      world = new World(game, demoMode, load, difficulty);
+
+      for (int i = 0; i < world.MAX_INFILTRATORS_IN_GAME; i++) {
         world.queueEntityAdd(new Infiltrator(world));
         world.infiltratorsAddedCount++;
       }
-      for (int i = 0; i < World.NPC_COUNT; i++) {
+      for (int i = 0; i < world.NPC_COUNT; i++) {
         world.queueEntityAdd(new Civilian(world));
       }
 
-      for (int i = 0; i < World.POWER_UP_COUNT; i++) {
+      for (int i = 0; i < world.POWER_UP_COUNT; i++) {
         world.queueEntityAdd(new PowerUp(world));
       }
     }else{
       Save save = new Save();
       JsonValue savedValues = save.loadJson();
-      MenuScreen.setDifficulty(savedValues.get("difficulty").toString());
+      String strDifficulty = savedValues.getString("difficulty");
+
+      this.game = game;
+      world = new World(game, demoMode, load, World.Difficulty.valueOf(strDifficulty));
+
       for (int i = 0; i < savedValues.get("entityPositionX").size; i++) {
         //1=Civilian, 2=Infiltrator, 3=Player, 4=Projectile, 5=PowerUp
         //Will print the values saved
@@ -84,9 +85,6 @@ public class GameScreen extends ScreenAdapter {
         }
       }
     }
-
-
-
     stars = game.atlas.createSprite("stars");
   }
 
@@ -133,7 +131,7 @@ public class GameScreen extends ScreenAdapter {
     renderer.render(world.foregroundLayersIds);
 
     if (world.infiltratorCount < World.MAX_INFILTRATORS_IN_GAME
-        && world.infiltratorsAddedCount < World.MAX_INFILTRATORS) {
+        && world.infiltratorsAddedCount < world.MAX_INFILTRATORS) {
       Infiltrator newInfiltrator = new Infiltrator(world);
       while (newInfiltrator.entityOnScreen(world)) {
         newInfiltrator.moveToRandomLocation(world);
@@ -143,7 +141,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     // Draw the UI
-    ui.render(world, screenBatch);
+    world.ui.render(world, screenBatch);
     world.checkForEndState();
   }
 
