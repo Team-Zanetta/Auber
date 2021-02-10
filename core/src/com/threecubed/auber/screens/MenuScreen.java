@@ -86,7 +86,7 @@ public class MenuScreen extends ScreenAdapter {
 
     loadButton = new Button(
             new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 300f),
-            1f, new Sprite(new Texture("loadButton.png")), game, onLoadClick);
+            1f, new Sprite(new Texture(Gdx.files.internal("individual_sprites/loadButton.png"))), game, onLoadClick);
 
 
 
@@ -99,7 +99,7 @@ public class MenuScreen extends ScreenAdapter {
 
     easyButton = new Button(
             new Vector2(Gdx.graphics.getWidth() / 4 - 200, Gdx.graphics.getHeight() / 2 + 50),
-            1f, new Sprite(new Texture("easyButton.png")), game, onEasyClick);
+            1f, new Sprite(new Texture(Gdx.files.internal("individual_sprites/easyButton.png"))), game, onEasyClick);
 
     Runnable onMediumClick = new Runnable() {
       @Override
@@ -110,7 +110,7 @@ public class MenuScreen extends ScreenAdapter {
 
     mediumButton = new Button(
             new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 + 50),
-            1f, new Sprite(new Texture("mediumButton.png")), game, onMediumClick);
+            1f, new Sprite(new Texture(Gdx.files.internal("individual_sprites/mediumButton.png"))), game, onMediumClick);
 
     Runnable onHardClick = new Runnable() {
       @Override
@@ -121,7 +121,7 @@ public class MenuScreen extends ScreenAdapter {
 
     hardButton = new Button(
             new Vector2(Gdx.graphics.getWidth() / 4 + 200, Gdx.graphics.getHeight() / 2 + 50),
-            1f, new Sprite(new Texture("hardButton.png")), game, onHardClick);
+            1f, new Sprite(new Texture(Gdx.files.internal("individual_sprites/hardButton.png"))), game, onHardClick);
   }
 
 
