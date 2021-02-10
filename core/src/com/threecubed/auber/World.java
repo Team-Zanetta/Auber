@@ -160,7 +160,7 @@ public class World {
   }
 
   /** The amount of time it takes for an infiltrator to sabotage a system. */
-  public static float SYSTEM_BREAK_TIME =  MenuScreen.difficulty.getSYSTEM_BREAK_TIME();
+  public float SYSTEM_BREAK_TIME;
   /** The chance an infiltrator will sabotage after pathfinding to a system. */
   public static final float SYSTEM_SABOTAGE_CHANCE = 0.6f;
   /** The distance the infiltrator can see. Default: 5 tiles */
@@ -168,7 +168,7 @@ public class World {
   /** The speed at which infiltrator projectiles should travel. */
   public static final float INFILTRATOR_PROJECTILE_SPEED = 1f;
   /** Maximum infiltrators in a full game of Auber (including defated ones). */
-  public static int MAX_INFILTRATORS =  MenuScreen.difficulty.getMAX_INFILTRATORS();
+  public int MAX_INFILTRATORS;
   /** The interval at which the infiltrator should attack the player when exposed. */
   public static final float INFILTRATOR_FIRING_INTERVAL = 3f;
   /** The damage a projectile should do. */
@@ -190,10 +190,10 @@ public class World {
   /** The distance an NPC can hear the teleporter ray shoot from. */
   public static final float NPC_EAR_STRENGTH = 80f;
   /** The number of NPCs in the game. */
-  public static int NPC_COUNT = MenuScreen.difficulty.getNPC_COUNT();
+  public int NPC_COUNT;
 
   /** The number or power ups in the game. */
-  public static int POWER_UP_COUNT = MenuScreen.difficulty.getPOWER_UP_COUNT();
+  public int POWER_UP_COUNT;
 
   public static enum SystemStates {
     WORKING,
@@ -201,14 +201,61 @@ public class World {
     DESTROYED
   }
 
+  public Difficulty difficulty;
+
+  public enum Difficulty {
+    EASY(20, 4, 8, 10f),
+    MEDIUM(15, 6, 16, 7.5f),
+    HARD(10, 8, 24, 5f);
+
+    final int POWER_UP_COUNT;
+    final int MAX_INFILTRATORS;
+    final int NPC_COUNT;
+    final float SYSTEM_BREAK_TIME;
+
+    Difficulty(int POWER_UP_COUNT, int MAX_INFILTRATORS, int NPC_COUNT, float SYSTEM_BREAK_TIME ){
+      this.POWER_UP_COUNT = POWER_UP_COUNT;
+      this.MAX_INFILTRATORS = MAX_INFILTRATORS;
+      this.NPC_COUNT = NPC_COUNT;
+      this.SYSTEM_BREAK_TIME = SYSTEM_BREAK_TIME;
+    }
+
+    public int getPOWER_UP_COUNT() {
+
+      return POWER_UP_COUNT;
+    }
+    public int getMAX_INFILTRATORS() {
+
+      return MAX_INFILTRATORS;
+    }
+    public int getNPC_COUNT() {
+
+      return NPC_COUNT;
+    }
+
+    public float getSYSTEM_BREAK_TIME() {
+
+      return SYSTEM_BREAK_TIME;
+    }
+  }
+
   /**
    * Initialise the game world.
    *
    * @param game The game object.
    * */
-  public World(AuberGame game) {
+  public World(AuberGame game, Difficulty difficulty) {
     this.game = game;
     atlas = game.atlas;
+
+    this.difficulty = difficulty;
+    this.POWER_UP_COUNT = difficulty.POWER_UP_COUNT;
+    this.MAX_INFILTRATORS = difficulty.MAX_INFILTRATORS;
+    this.NPC_COUNT = difficulty.NPC_COUNT;
+    this.SYSTEM_BREAK_TIME = difficulty.SYSTEM_BREAK_TIME;
+
+    ui = new GameUi(game);
+    ui.queueMessage(difficulty.name());
 
     // Configure the camera
     camera.setToOrtho(false, 480, 270);
@@ -259,8 +306,9 @@ public class World {
    * @param game The game object
    * @param demoMode Whether to run the game in demo mode
    * */
-  public World(AuberGame game, boolean demoMode, boolean ifLoad) {
-    this(game);
+  public World(AuberGame game, boolean demoMode, boolean ifLoad, Difficulty difficulty) {
+    this(game, difficulty);
+
     this.demoMode = demoMode;
     this.ifLoad = ifLoad;
     if (demoMode) {
@@ -280,7 +328,9 @@ public class World {
         }
       }
     }
+
   }
+
 
   public void addEntity(GameEntity entity) {
     entities.add(entity);
@@ -452,7 +502,7 @@ public class World {
       if (!demoMode) {
         game.setScreen(new GameOverScreen(game, false));
       } else {
-        game.setScreen(new GameScreen(game, true, false));
+        game.setScreen(new GameScreen(game, true, false, difficulty));
       }
     } else if (infiltratorCount <= 0) {
       game.setScreen(new GameOverScreen(game, true));
