@@ -74,7 +74,7 @@ public class MenuScreen extends ScreenAdapter {
     };
 
     demoButton = new Button(
-            new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 250f),
+            new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 150f),
             1f, game.atlas.createSprite("demoButton"), game, onDemoClick);
 
     Runnable onLoadClick = new Runnable() {
@@ -85,7 +85,7 @@ public class MenuScreen extends ScreenAdapter {
     };
 
     loadButton = new Button(
-            new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 400f),
+            new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 300f),
             1f, new Sprite(new Texture("loadButton.png")), game, onLoadClick);
 
 
