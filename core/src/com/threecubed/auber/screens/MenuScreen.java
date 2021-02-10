@@ -28,7 +28,6 @@ public class MenuScreen extends ScreenAdapter {
   World world;
   AuberGame game;
 
-  public static Difficulty difficulty;
   Button hardButton;
   Button mediumButton;
   Button easyButton;
@@ -49,7 +48,6 @@ public class MenuScreen extends ScreenAdapter {
    * */
   public MenuScreen(final AuberGame game) {
     this.game = game;
-    difficulty = Difficulty.EASY;
 
     spriteBatch = new SpriteBatch();
 
@@ -57,21 +55,21 @@ public class MenuScreen extends ScreenAdapter {
     instructions = game.atlas.createSprite("instructions");
     title = game.atlas.createSprite("auber_logo");
 
-    Runnable onPlayClick = new Runnable() {
-      @Override
-      public void run() {
-        game.setScreen(new GameScreen(game, false, false));
-      }
-    };
+//    Runnable onPlayClick = new Runnable() {
+//      @Override
+//      public void run() {
+//        game.setScreen(new GameScreen(game, false, false, difficulty));
+//      }
+//    };
 
-    playButton = new Button(
-            new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 100),
-            1f, game.atlas.createSprite("playButton"), game, onPlayClick);
+//    playButton = new Button(
+//            new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 100),
+//            1f, game.atlas.createSprite("playButton"), game, onPlayClick);
 
     Runnable onDemoClick = new Runnable() {
       @Override
       public void run() {
-        game.setScreen(new GameScreen(game, true, false));
+        game.setScreen(new GameScreen(game, true, false, World.Difficulty.HARD));
       }
     };
 
@@ -82,7 +80,7 @@ public class MenuScreen extends ScreenAdapter {
     Runnable onLoadClick = new Runnable() {
       @Override
       public void run() {
-        game.setScreen(new GameScreen(game, false, true));
+        game.setScreen(new GameScreen(game, false, true, World.Difficulty.HARD));
       }
     };
 
@@ -95,7 +93,7 @@ public class MenuScreen extends ScreenAdapter {
     Runnable onEasyClick = new Runnable() {
       @Override
       public void run() {
-        difficulty = Difficulty.EASY;
+        game.setScreen(new GameScreen(game, false, false, World.Difficulty.EASY));
       }
     };
 
@@ -106,7 +104,7 @@ public class MenuScreen extends ScreenAdapter {
     Runnable onMediumClick = new Runnable() {
       @Override
       public void run() {
-        difficulty = Difficulty.MEDIUM;
+        game.setScreen(new GameScreen(game,false, false, World.Difficulty.MEDIUM));
       }
     };
 
@@ -117,7 +115,7 @@ public class MenuScreen extends ScreenAdapter {
     Runnable onHardClick = new Runnable() {
       @Override
       public void run() {
-        difficulty = Difficulty.HARD;
+        game.setScreen(new GameScreen(game,false, false, World.Difficulty.HARD));
       }
     };
 
@@ -125,52 +123,7 @@ public class MenuScreen extends ScreenAdapter {
             new Vector2(Gdx.graphics.getWidth() / 4 + 200, Gdx.graphics.getHeight() / 2 + 50),
             1f, new Sprite(new Texture("hardButton.png")), game, onHardClick);
   }
-  
-    public enum Difficulty {
-    EASY(20, 4, 8, 10f),
-    MEDIUM(15, 6, 16, 7.5f),
-    HARD(10, 8, 24, 5f);
 
-    private final int POWER_UP_COUNT;
-    private final int MAX_INFILTRATORS;
-    private final int NPC_COUNT;
-    private final float SYSTEM_BREAK_TIME;
-
-    Difficulty(int POWER_UP_COUNT, int MAX_INFILTRATORS, int NPC_COUNT, float SYSTEM_BREAK_TIME ){
-      this.POWER_UP_COUNT = POWER_UP_COUNT;
-      this.MAX_INFILTRATORS = MAX_INFILTRATORS;
-      this.NPC_COUNT = NPC_COUNT;
-      this.SYSTEM_BREAK_TIME = SYSTEM_BREAK_TIME;
-    }
-
-    public int getPOWER_UP_COUNT() {
-
-      return POWER_UP_COUNT;
-    }
-    public int getMAX_INFILTRATORS() {
-
-      return MAX_INFILTRATORS;
-    }
-    public int getNPC_COUNT() {
-
-      return NPC_COUNT;
-    }
-
-    public float getSYSTEM_BREAK_TIME() {
-
-      return SYSTEM_BREAK_TIME;
-    }
-  }
-
-  public static void setDifficulty(String s){
-    if(s == "EASY"){
-      difficulty = Difficulty.EASY;
-    }else if (s == "MEDIUM"){
-      difficulty = Difficulty.MEDIUM;
-    }else{
-      difficulty = difficulty.HARD;
-    }
-  }
 
   @Override
   public void render(float deltaTime) {
@@ -179,7 +132,7 @@ public class MenuScreen extends ScreenAdapter {
       Gdx.graphics.setFullscreenMode(currentDisplayMode);
     }
     if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-      game.setScreen(new GameScreen(game, true, false));
+      game.setScreen(new GameScreen(game, true, false, World.Difficulty.HARD));
     }
 
     // Set the background color
@@ -198,7 +151,7 @@ public class MenuScreen extends ScreenAdapter {
     title.setPosition(0f, 550f);
     title.draw(spriteBatch);
 
-    playButton.render(spriteBatch);
+//    playButton.render(spriteBatch);
     demoButton.render(spriteBatch);
     loadButton.render(spriteBatch);
     easyButton.render(spriteBatch);

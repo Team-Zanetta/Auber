@@ -19,7 +19,7 @@ public class Save {
     public List<Float> entityPositionX = new ArrayList<Float>();
     public List<Float> entityPositionY = new ArrayList<Float>();
     public List<Integer> entityType = new ArrayList<Integer>();
-    public MenuScreen.Difficulty difficulty;
+    public World.Difficulty difficulty;
 
 
 
@@ -30,7 +30,7 @@ public class Save {
             save.entityPositionY.add(entity.getCenterY());
             save.entityType.add(entity.entityType);
         }
-        save.difficulty = MenuScreen.difficulty;
+        save.difficulty = world.difficulty;
         return save;
     }
 

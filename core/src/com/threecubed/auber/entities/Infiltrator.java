@@ -137,7 +137,7 @@ public class Infiltrator extends Npc {
             navigateToRandomSystem(world);
           }
         }
-      }, World.SYSTEM_BREAK_TIME);
+      }, world.SYSTEM_BREAK_TIME);
     }
   }
 
